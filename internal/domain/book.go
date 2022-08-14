@@ -2,7 +2,7 @@ package domain
 
 import "time"
 
-type book struct {
+type Book struct {
 	ID          int64     `json:"id"`
 	Title       string    `json:"title"`
 	Author      string    `json:"author"`
