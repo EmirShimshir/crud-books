@@ -18,7 +18,7 @@ func NewBooks(db *sql.DB) *Books {
 }
 
 func (b *Books) Create(ctx context.Context, book domain.Book) error {
-	_, err := b.db.Exec("insert into books (title, author, publish_date, rating) values ($1, $2, $3, $4)",
+	_, err := b.db.ExecContext(ctx, "insert into books (title, author, publish_date, rating) values ($1, $2, $3, $4)",
 		book.Title, book.Author, book.PublishDate, book.Rating)
 
 	return err
@@ -26,7 +26,7 @@ func (b *Books) Create(ctx context.Context, book domain.Book) error {
 
 func (b *Books) GetByID(ctx context.Context, id int64) (domain.Book, error) {
 	var book domain.Book
-	row := b.db.QueryRow("select id, title, author, publish_date, rating from books where id=$1", id)
+	row := b.db.QueryRowContext(ctx, "select id, title, author, publish_date, rating from books where id=$1", id)
 	err := row.Scan(&book.ID, &book.Title, &book.Author, &book.PublishDate, &book.Rating)
 	if err == sql.ErrNoRows {
 		return book, domain.ErrBookNotFound
@@ -39,7 +39,7 @@ func (b *Books) GetByID(ctx context.Context, id int64) (domain.Book, error) {
 }
 
 func (b *Books) GetAll(ctx context.Context) ([]domain.Book, error) {
-	rows, err := b.db.Query("select id, title, author, publish_date, rating from books")
+	rows, err := b.db.QueryContext(ctx, "select id, title, author, publish_date, rating from books")
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (b *Books) GetAll(ctx context.Context) ([]domain.Book, error) {
 }
 
 func (b *Books) Delete(ctx context.Context, id int64) error {
-	_, err := b.db.Exec("DELETE FROM books WHERE id=$1", id)
+	_, err := b.db.ExecContext(ctx, "delete from books where id=$1", id)
 
 	return err
 }
@@ -99,7 +99,7 @@ func (b *Books) Update(ctx context.Context, id int64, inp domain.UpdateBookInput
 
 	args = append(args, id)
 
-	_, err := b.db.Exec(query, args...)
+	_, err := b.db.ExecContext(ctx, query, args...)
 
 	return err
 }
