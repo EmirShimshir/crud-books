@@ -59,7 +59,12 @@ func (b *Books) GetAll(ctx context.Context) ([]domain.Book, error) {
 }
 
 func (b *Books) Delete(ctx context.Context, id int64) error {
-	_, err := b.db.ExecContext(ctx, "delete from books where id=$1", id)
+	_, err := b.GetByID(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	_, err = b.db.ExecContext(ctx, "delete from books where id=$1", id)
 
 	return err
 }

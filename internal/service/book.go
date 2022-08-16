@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/EmirShimshir/crud-books/internal/domain"
+	"time"
 )
 
 type BooksRepository interface {
@@ -24,6 +25,10 @@ func NewBooks(repo BooksRepository) *Books {
 }
 
 func (b *Books) Create(ctx context.Context, book domain.Book) error {
+	if book.PublishDate.IsZero() {
+		book.PublishDate = time.Now()
+	}
+
 	return b.repo.Create(ctx, book)
 }
 

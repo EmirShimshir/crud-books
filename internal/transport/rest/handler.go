@@ -101,7 +101,7 @@ func (h *Handler) createBook(w http.ResponseWriter, r *http.Request) {
 	err = h.booksService.Create(context.TODO(), book)
 	if err != nil {
 		log.Println("createBook() error:", err)
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
@@ -113,18 +113,21 @@ func (h *Handler) getBookByID(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("getBookByID() error:", err)
 		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	book, err := h.booksService.GetByID(context.TODO(), id)
 	if err != nil {
 		log.Println("getBookByID() error:", err)
 		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	data, err := json.Marshal(book)
 	if err != nil {
 		log.Println("getBookByID() error:", err)
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Add("Content-Type", "application/json")
@@ -136,12 +139,14 @@ func (h *Handler) updateBookByID(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("updateBookByID() error:", err)
 		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	data, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Println("updateBookByID() error:", err)
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	updateBook := domain.UpdateBookInput{}
@@ -150,12 +155,14 @@ func (h *Handler) updateBookByID(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("updateBookByID() error:", err)
 		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	err = h.booksService.Update(context.TODO(), id, updateBook)
 	if err != nil {
 		log.Println("updateBookByID() error:", err)
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -165,13 +172,16 @@ func (h *Handler) deleteBookByID(w http.ResponseWriter, r *http.Request) {
 	id, err := getIdFromRequest(r)
 	if err != nil {
 		log.Println("deleteBookByID() error:", err)
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	err = h.booksService.Delete(context.TODO(), id)
 	if err != nil {
+		println(1)
 		log.Println("deleteBookByID() error:", err)
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
