@@ -115,7 +115,7 @@ func (h *Handler) getBookByID(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	book, err := h.booksService.GetByID(context.TODO(), int64(id))
+	book, err := h.booksService.GetByID(context.TODO(), id)
 	if err != nil {
 		log.Println("getBookByID() error:", err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -152,7 +152,7 @@ func (h *Handler) updateBookByID(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	err = h.booksService.Update(context.TODO(), int64(id), updateBook)
+	err = h.booksService.Update(context.TODO(), id, updateBook)
 	if err != nil {
 		log.Println("updateBookByID() error:", err)
 		w.WriteHeader(http.StatusInternalServerError)
