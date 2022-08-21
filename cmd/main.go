@@ -13,12 +13,12 @@ import (
 func main() {
 	db, err := database.NewPosgresqlConnection(
 		database.ConnectionSettings{
-			Host:     "localhost",
+			Host:     "db",
 			Port:     5432,
 			Username: "postgres",
 			DBName:   "postgres",
 			SSLMode:  "disable",
-			Password: "qwerty123",
+			Password: "qwerty",
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -30,7 +30,7 @@ func main() {
 	handler := rest.NewHandler(booksService)
 
 	srv := http.Server{
-		Addr:    ":10000",
+		Addr:    ":8000",
 		Handler: handler.InitRouter(),
 	}
 
