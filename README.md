@@ -5,34 +5,41 @@
 + postgres
 
 ## How to start:
-Run docker container with postgres:
++ Install docker-compose and make
+
++ Run commands:
+
 ```
-docker run -d --name books -e POSTGRES_PASSWORD=qwerty123 -v {$HOME}/pgdata/:/var/lib/postgresql/data -p 5432:5432 postgres
+git clone https://github.com/EmirShimshir/crud-books.git
 ```
 
-Start container terminal and use psql:
 ```
-docker exec -it books bash
-psql -U postgres
-```
-
-Create a table for books:
-```sql
-create table books (
-id serial not null unique,
-title varchar(255) not null unique,
-author varchar(255) not null,
-publish_date timestamp not null default now(),
-rating int not null
-);
-```
-
-Run application:
-```
-go run cmd/main.go
+make run
 ```
 
 ## API example
+
+### This REST API contains the following methods:
+
+`[GET] /books/` - get all books
+
+`[POST] /books/` - create new book
+
+`[GET] /books/id/{id}` - get book by id
+
+`[PUT] /books/id/{id}` - create update book by id
+
+`[DELETE] /books/id/{id}` - delete book by id
+
+### POST request body example:
+```json
+{
+"title":"book",
+"author":"booker",
+"rating": 5
+}
+```
+
 
 ### GET (no books in database):
 
