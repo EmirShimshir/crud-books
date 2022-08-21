@@ -13,7 +13,7 @@ import (
 func main() {
 	db, err := database.NewPosgresqlConnection(
 		database.ConnectionSettings{
-			Host:     "db",
+			Host:     "localhost",
 			Port:     5432,
 			Username: "postgres",
 			DBName:   "postgres",

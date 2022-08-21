@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/EmirShimshir/crud-books/internal/domain"
+	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -30,36 +31,20 @@ func NewHandler(books Books) *Handler {
 }
 
 func (h *Handler) InitRouter() http.Handler {
-	sm := http.NewServeMux()
+	r := mux.NewRouter()
 
-	sm.HandleFunc("/books/", loggerMiddleware(h.book))
-	sm.HandleFunc("/books/id/", loggerMiddleware(h.id))
+	r.Use(loggerMiddleware)
 
-	return sm
-}
-
-func (h *Handler) book(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		h.getAllBooks(w, r)
-	case http.MethodPost:
-		h.createBook(w, r)
-	default:
-		w.WriteHeader(http.StatusNotImplemented)
+	booksRouter := r.PathPrefix("/books").Subrouter()
+	{
+		booksRouter.HandleFunc("/", h.getAllBooks).Methods(http.MethodGet)
+		booksRouter.HandleFunc("/", h.createBook).Methods(http.MethodPost)
+		booksRouter.HandleFunc("/{id:[0-9]+}", h.getBookByID).Methods(http.MethodGet)
+		booksRouter.HandleFunc("/{id:[0-9]+}", h.updateBookByID).Methods(http.MethodPut)
+		booksRouter.HandleFunc("/{id:[0-9]+}", h.deleteBookByID).Methods(http.MethodDelete)
 	}
-}
 
-func (h *Handler) id(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		h.getBookByID(w, r)
-	case http.MethodPut:
-		h.updateBookByID(w, r)
-	case http.MethodDelete:
-		h.deleteBookByID(w, r)
-	default:
-		w.WriteHeader(http.StatusNotImplemented)
-	}
+	return r
 }
 
 func (h *Handler) getAllBooks(w http.ResponseWriter, r *http.Request) {
@@ -188,7 +173,8 @@ func (h *Handler) deleteBookByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func getIdFromRequest(r *http.Request) (int64, error) {
-	id, err := strconv.Atoi(r.URL.String()[len("/books/id/"):])
+	vars := mux.Vars(r)
+	id, err := strconv.ParseInt(vars["id"], 10, 64)
 	if err != nil {
 		return 0, err
 	}
@@ -197,5 +183,5 @@ func getIdFromRequest(r *http.Request) (int64, error) {
 		return 0, errors.New("id can't be 0")
 	}
 
-	return int64(id), nil
+	return id, nil
 }

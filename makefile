@@ -1,6 +1,9 @@
 migrate_from_app:
 	migrate -path ./schema -database 'postgres://postgres:qwerty@db:5432/postgres?sslmode=disable' up
 
+migrate:
+	migrate -path ./schema -database 'postgres://postgres:qwerty@localhost:5432/postgres?sslmode=disable' up
+
 build:
 	docker-compose up --build crud-books
 
