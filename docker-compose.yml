@@ -21,3 +21,5 @@ services:
       - postgres_volume:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=qwerty
+    ports:
+      - 5432:5432

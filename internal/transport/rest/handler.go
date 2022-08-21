@@ -37,8 +37,8 @@ func (h *Handler) InitRouter() http.Handler {
 
 	booksRouter := r.PathPrefix("/books").Subrouter()
 	{
-		booksRouter.HandleFunc("/", h.getAllBooks).Methods(http.MethodGet)
-		booksRouter.HandleFunc("/", h.createBook).Methods(http.MethodPost)
+		booksRouter.HandleFunc("", h.getAllBooks).Methods(http.MethodGet)
+		booksRouter.HandleFunc("", h.createBook).Methods(http.MethodPost)
 		booksRouter.HandleFunc("/{id:[0-9]+}", h.getBookByID).Methods(http.MethodGet)
 		booksRouter.HandleFunc("/{id:[0-9]+}", h.updateBookByID).Methods(http.MethodPut)
 		booksRouter.HandleFunc("/{id:[0-9]+}", h.deleteBookByID).Methods(http.MethodDelete)
