@@ -5,14 +5,18 @@ volumes:
 
 services:
   crud-books:
-    restart: always
     build: ./
-    command: ["./wait-for-postgres.sh", "db", "./crud-books"]
+    command: ["./wait-for-postgres.sh", "./crud-books"]
     ports:
-      - 8000:8000
+      - 8080:8080
     depends_on:
       - db
     environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_NAME=postgres
+      - DB_SSLMODE=disable
       - DB_PASSWORD=qwerty
   db:
     restart: always
