@@ -21,15 +21,15 @@ make run
 
 ### This REST API contains the following methods:
 
-`[GET] /books/` - get all books
+`[GET] /books` - get all books
 
-`[POST] /books/` - create new book
+`[POST] /books` - create new book
 
-`[GET] /books/id/{id}` - get book by id
+`[GET] /books/{id}` - get book by id
 
-`[PUT] /books/id/{id}` - create update book by id
+`[PUT] /books/{id}` - create update book by id
 
-`[DELETE] /books/id/{id}` - delete book by id
+`[DELETE] /books/{id}` - delete book by id
 
 ### POST request body example:
 ```json
