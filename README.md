@@ -43,14 +43,17 @@ make run
 
 ### GET (no books in database):
 
-<img width="846" alt="Снимок экрана 2022-08-16 в 21 27 21" src="https://user-images.githubusercontent.com/88317896/184955267-177e36df-5cf6-4d8e-94e7-4076224be120.png">
+<img width="764" alt="Снимок экрана 2022-08-22 в 17 32 23" src="https://user-images.githubusercontent.com/88317896/185901248-a6345b63-8bf1-4c89-8792-120b782c5562.png">
+
 
 ### POST (add new book):
 
-<img width="848" alt="Снимок экрана 2022-08-16 в 21 27 57" src="https://user-images.githubusercontent.com/88317896/184955399-8ac214d6-0e05-4d30-bf9f-968e89ec68e5.png">
+<img width="766" alt="Снимок экрана 2022-08-22 в 17 33 12" src="https://user-images.githubusercontent.com/88317896/185901306-897beb11-bc4e-4500-abf1-80ea984139a8.png">
+
 
 ### GET (check new book):
-<img width="853" alt="Снимок экрана 2022-08-16 в 21 47 23" src="https://user-images.githubusercontent.com/88317896/184955741-df5a8ed2-cc3c-4685-bb3f-8c8900281f32.png">
+<img width="767" alt="Снимок экрана 2022-08-22 в 17 33 34" src="https://user-images.githubusercontent.com/88317896/185901366-dc77ade4-5e0b-4ea5-b859-c77448911b3b.png">
+
 
 
 
