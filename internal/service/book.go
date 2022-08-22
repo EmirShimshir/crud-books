@@ -2,8 +2,9 @@ package service
 
 import (
 	"context"
-	"github.com/EmirShimshir/crud-books/internal/domain"
 	"time"
+
+	"github.com/EmirShimshir/crud-books/internal/domain"
 )
 
 type BooksRepository interface {
