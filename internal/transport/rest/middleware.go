@@ -1,14 +1,17 @@
 package rest
 
 import (
-	"log"
 	"net/http"
-	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func loggerMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s: [%s] - %s ", time.Now().Format(time.RFC822), r.Method, r.URL)
+		log.WithFields(log.Fields{
+			"method": r.Method,
+			"url":    r.URL,
+		}).Info()
 		next.ServeHTTP(w, r)
 	})
 }
