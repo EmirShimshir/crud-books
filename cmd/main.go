@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"github.com/EmirShimshir/crud-books/internal/config"
 	"github.com/EmirShimshir/crud-books/internal/repository/psql"
 	"github.com/EmirShimshir/crud-books/internal/service"
 	"github.com/EmirShimshir/crud-books/internal/transport/rest"
@@ -10,15 +12,27 @@ import (
 	"time"
 )
 
+const (
+	CONFIG_DIR  = "configs"
+	CONFIG_FILE = "main"
+)
+
 func main() {
+	cfg, err := config.New(CONFIG_DIR, CONFIG_FILE)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Printf("config: %+v\n", cfg)
+
 	db, err := database.NewPosgresqlConnection(
 		database.ConnectionSettings{
-			Host:     "localhost",
-			Port:     5432,
-			Username: "postgres",
-			DBName:   "postgres",
-			SSLMode:  "disable",
-			Password: "qwerty",
+			Host:     cfg.DB.Host,
+			Port:     cfg.DB.Port,
+			Username: cfg.DB.Username,
+			DBName:   cfg.DB.Name,
+			SSLMode:  cfg.DB.SSLMode,
+			Password: cfg.DB.Password,
 		})
 	if err != nil {
 		log.Fatal(err)
@@ -30,7 +44,7 @@ func main() {
 	handler := rest.NewHandler(booksService)
 
 	srv := http.Server{
-		Addr:    ":8000",
+		Addr:    fmt.Sprintf(":%d", cfg.Server.Port),
 		Handler: handler.InitRouter(),
 	}
 
