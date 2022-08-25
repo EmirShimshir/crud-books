@@ -61,7 +61,7 @@ func (h *Handler) createBook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.services.GetBookService().Create(context.TODO(), book)
+	_, err = h.services.GetBookService().Create(context.TODO(), book)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"handler": "createBook",
@@ -131,7 +131,7 @@ func (h *Handler) updateBookByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.services.GetBookService().Update(context.TODO(), id, updateBook)
+	_, err = h.services.GetBookService().Update(context.TODO(), id, updateBook)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"handler": "updateBookByID",

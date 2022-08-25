@@ -17,7 +17,7 @@ func NewBookService(repo domain.BookRepository) *BookService {
 	}
 }
 
-func (b *BookService) Create(ctx context.Context, book domain.Book) error {
+func (b *BookService) Create(ctx context.Context, book domain.Book) (*domain.Book, error) {
 	if book.PublishDate.IsZero() {
 		book.PublishDate = time.Now()
 	}
@@ -25,7 +25,7 @@ func (b *BookService) Create(ctx context.Context, book domain.Book) error {
 	return b.repo.Create(ctx, book)
 }
 
-func (b *BookService) GetByID(ctx context.Context, id int64) (domain.Book, error) {
+func (b *BookService) GetByID(ctx context.Context, id int64) (*domain.Book, error) {
 	return b.repo.GetByID(ctx, id)
 }
 
@@ -37,6 +37,6 @@ func (b *BookService) Delete(ctx context.Context, id int64) error {
 	return b.repo.Delete(ctx, id)
 }
 
-func (b *BookService) Update(ctx context.Context, id int64, inp domain.UpdateBookInput) error {
+func (b *BookService) Update(ctx context.Context, id int64, inp domain.UpdateBookInput) (*domain.Book, error) {
 	return b.repo.Update(ctx, id, inp)
 }
