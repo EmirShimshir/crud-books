@@ -7,19 +7,11 @@ import (
 	"github.com/EmirShimshir/crud-books/internal/domain"
 )
 
-type BooksRepository interface {
-	Create(ctx context.Context, book domain.Book) error
-	GetByID(ctx context.Context, id int64) (domain.Book, error)
-	List(ctx context.Context) ([]domain.Book, error)
-	Delete(ctx context.Context, id int64) error
-	Update(ctx context.Context, id int64, inp domain.UpdateBookInput) error
-}
-
 type Books struct {
-	repo BooksRepository
+	repo domain.BookRepository
 }
 
-func NewBooks(repo BooksRepository) *Books {
+func NewBooks(repo domain.BookRepository) *Books {
 	return &Books{
 		repo: repo,
 	}

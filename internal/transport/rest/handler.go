@@ -13,19 +13,11 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type BooksService interface {
-	Create(ctx context.Context, book domain.Book) error
-	GetByID(ctx context.Context, id int64) (domain.Book, error)
-	List(ctx context.Context) ([]domain.Book, error)
-	Delete(ctx context.Context, id int64) error
-	Update(ctx context.Context, id int64, inp domain.UpdateBookInput) error
-}
-
 type Handler struct {
-	service BooksService
+	service domain.BookService
 }
 
-func NewHandler(service BooksService) *Handler {
+func NewHandler(service domain.BookService) *Handler {
 	return &Handler{
 		service: service,
 	}

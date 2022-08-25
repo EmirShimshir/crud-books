@@ -9,22 +9,22 @@ import (
 	"github.com/EmirShimshir/crud-books/internal/domain"
 )
 
-type Books struct {
+type BooksRepository struct {
 	db *sql.DB
 }
 
-func NewBooks(db *sql.DB) *Books {
-	return &Books{db}
+func NewBooks(db *sql.DB) *BooksRepository {
+	return &BooksRepository{db}
 }
 
-func (b *Books) Create(ctx context.Context, book domain.Book) error {
+func (b *BooksRepository) Create(ctx context.Context, book domain.Book) error {
 	_, err := b.db.ExecContext(ctx, "insert into books (title, author, publish_date, rating) values ($1, $2, $3, $4)",
 		book.Title, book.Author, book.PublishDate, book.Rating)
 
 	return err
 }
 
-func (b *Books) GetByID(ctx context.Context, id int64) (domain.Book, error) {
+func (b *BooksRepository) GetByID(ctx context.Context, id int64) (domain.Book, error) {
 	var book domain.Book
 	row := b.db.QueryRowContext(ctx, "select id, title, author, publish_date, rating from books where id=$1", id)
 	err := row.Scan(&book.ID, &book.Title, &book.Author, &book.PublishDate, &book.Rating)
@@ -38,7 +38,7 @@ func (b *Books) GetByID(ctx context.Context, id int64) (domain.Book, error) {
 	return book, nil
 }
 
-func (b *Books) List(ctx context.Context) ([]domain.Book, error) {
+func (b *BooksRepository) List(ctx context.Context) ([]domain.Book, error) {
 	rows, err := b.db.QueryContext(ctx, "select id, title, author, publish_date, rating from books")
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func (b *Books) List(ctx context.Context) ([]domain.Book, error) {
 	return books, nil
 }
 
-func (b *Books) Delete(ctx context.Context, id int64) error {
+func (b *BooksRepository) Delete(ctx context.Context, id int64) error {
 	_, err := b.GetByID(ctx, id)
 	if err != nil {
 		return err
@@ -69,7 +69,7 @@ func (b *Books) Delete(ctx context.Context, id int64) error {
 	return err
 }
 
-func (b *Books) Update(ctx context.Context, id int64, inp domain.UpdateBookInput) error {
+func (b *BooksRepository) Update(ctx context.Context, id int64, inp domain.UpdateBookInput) error {
 	setValues := make([]string, 0)
 	args := make([]any, 0)
 	argId := 1
