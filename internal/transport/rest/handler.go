@@ -41,9 +41,9 @@ func (h *Handler) InitRouter() http.Handler {
 	{
 		booksRouter.HandleFunc("", h.getAllBooks).Methods(http.MethodGet)
 		booksRouter.HandleFunc("", h.createBook).Methods(http.MethodPost)
-		booksRouter.HandleFunc("/{id:[0-9]+}", h.getBookByID).Methods(http.MethodGet)
-		booksRouter.HandleFunc("/{id:[0-9]+}", h.updateBookByID).Methods(http.MethodPut)
-		booksRouter.HandleFunc("/{id:[0-9]+}", h.deleteBookByID).Methods(http.MethodDelete)
+		booksRouter.HandleFunc("/{id}", h.getBookByID).Methods(http.MethodGet)
+		booksRouter.HandleFunc("/{id}", h.updateBookByID).Methods(http.MethodPut)
+		booksRouter.HandleFunc("/{id}", h.deleteBookByID).Methods(http.MethodDelete)
 	}
 
 	return r
