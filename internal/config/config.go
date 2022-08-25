@@ -9,7 +9,9 @@ type Config struct {
 	DB Postgres
 
 	Server struct {
-		Port int `mapstructure:"port"`
+		Port         int `mapstructure:"port"`
+		WriteTimeout int `mapstructure:"write_timeout"`
+		ReadTimeout  int `mapstructure:"read_timeout"`
 	} `mapstructure:"server"`
 }
 
