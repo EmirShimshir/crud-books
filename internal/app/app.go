@@ -53,10 +53,10 @@ func Run(configDir, configFile string) {
 	log.Info("db is connected")
 
 	// init deps
-	booksRepo := psql.NewBooks(db)
-	booksService := service.NewBooks(booksRepo)
-	handler := rest.NewHandler(booksService)
-	log.Info("repository, service  and handler initialized")
+	repositories := psql.NewRepositories(db)
+	services := service.NewServices(repositories)
+	handler := rest.NewHandler(services)
+	log.Info("repositorys, services  and handler initialized")
 
 	// init server
 	server := http.Server{
