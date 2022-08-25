@@ -17,7 +17,7 @@ import (
 type Books interface {
 	Create(ctx context.Context, book domain.Book) error
 	GetByID(ctx context.Context, id int64) (domain.Book, error)
-	GetAll(ctx context.Context) ([]domain.Book, error)
+	List(ctx context.Context) ([]domain.Book, error)
 	Delete(ctx context.Context, id int64) error
 	Update(ctx context.Context, id int64, inp domain.UpdateBookInput) error
 }
@@ -50,7 +50,7 @@ func (h *Handler) InitRouter() http.Handler {
 }
 
 func (h *Handler) getAllBooks(w http.ResponseWriter, r *http.Request) {
-	books, err := h.booksService.GetAll(context.TODO())
+	books, err := h.booksService.List(context.TODO())
 	if err != nil {
 		log.WithFields(log.Fields{
 			"handler": "getAllBooks",

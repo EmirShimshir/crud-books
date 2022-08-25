@@ -38,7 +38,7 @@ func (b *Books) GetByID(ctx context.Context, id int64) (domain.Book, error) {
 	return book, nil
 }
 
-func (b *Books) GetAll(ctx context.Context) ([]domain.Book, error) {
+func (b *Books) List(ctx context.Context) ([]domain.Book, error) {
 	rows, err := b.db.QueryContext(ctx, "select id, title, author, publish_date, rating from books")
 	if err != nil {
 		return nil, err

@@ -10,7 +10,7 @@ import (
 type BooksRepository interface {
 	Create(ctx context.Context, book domain.Book) error
 	GetByID(ctx context.Context, id int64) (domain.Book, error)
-	GetAll(ctx context.Context) ([]domain.Book, error)
+	List(ctx context.Context) ([]domain.Book, error)
 	Delete(ctx context.Context, id int64) error
 	Update(ctx context.Context, id int64, inp domain.UpdateBookInput) error
 }
@@ -37,8 +37,8 @@ func (b *Books) GetByID(ctx context.Context, id int64) (domain.Book, error) {
 	return b.repo.GetByID(ctx, id)
 }
 
-func (b *Books) GetAll(ctx context.Context) ([]domain.Book, error) {
-	return b.repo.GetAll(ctx)
+func (b *Books) List(ctx context.Context) ([]domain.Book, error) {
+	return b.repo.List(ctx)
 }
 
 func (b *Books) Delete(ctx context.Context, id int64) error {
