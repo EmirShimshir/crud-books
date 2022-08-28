@@ -6,7 +6,9 @@ import (
 
 // todo
 // swagger
+// gin
 // cache
+// auth
 
 func main() {
 	app.Run("configs", "main")
