@@ -1,6 +1,6 @@
 module github.com/EmirShimshir/crud-books
 
-go 1.18
+go 1.19
 
 require (
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
