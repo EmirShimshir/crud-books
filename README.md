@@ -1,7 +1,7 @@
 # CRUD app for books management
 
 ## Tools:
-+ go 1.18
++ go 1.19
 + postgres
 
 ## How to start:
