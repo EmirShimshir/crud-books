@@ -2,7 +2,7 @@ package rest
 
 import (
 	"github.com/EmirShimshir/crud-books/internal/domain"
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
@@ -20,11 +20,11 @@ func NewHandler(services Services) *Handler {
 }
 
 func (h *Handler) InitRouter() http.Handler {
-	router := mux.NewRouter()
+	router := gin.New()
 
-	router.Use(loggerMiddleware)
+	router.Use(logger(), gin.Recovery())
 
-	h.initBook(router)
+	h.initBook(&router.RouterGroup)
 
 	return router
 }

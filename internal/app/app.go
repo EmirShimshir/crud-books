@@ -67,6 +67,7 @@ func Run(configDir, configFile string) {
 	}
 	log.Info("SERVER STARTED")
 
+	// TODO graceful shutdown
 	err = server.ListenAndServe()
 	if err != nil {
 		log.WithFields(log.Fields{
