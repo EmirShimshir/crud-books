@@ -5,10 +5,17 @@ import (
 )
 
 // todo
-// swagger
+// swagger +
 // gin +
 // cache
 // auth
+
+// @title       crud-books API
+// @version     1.0
+// @description API Server for CRUD application
+
+// @host     localhost:8080
+// @BasePath /
 
 func main() {
 	app.Run("configs", "main")

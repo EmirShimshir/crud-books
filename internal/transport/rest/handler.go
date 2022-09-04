@@ -25,6 +25,7 @@ func (h *Handler) InitRouter() http.Handler {
 	router.Use(logger(), gin.Recovery())
 
 	h.initBook(&router.RouterGroup)
+	h.initSwagger(&router.RouterGroup)
 
 	return router
 }

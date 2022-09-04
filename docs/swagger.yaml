@@ -1,0 +1,193 @@
+basePath: /
+definitions:
+  domain.Book:
+    properties:
+      author:
+        type: string
+      id:
+        type: integer
+      publish_date:
+        type: string
+      rating:
+        type: integer
+      title:
+        type: string
+    type: object
+  domain.UpdateBookInput:
+    properties:
+      author:
+        type: string
+      publish_date:
+        type: string
+      rating:
+        type: integer
+      title:
+        type: string
+    type: object
+  rest.errorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  rest.statusResponse:
+    properties:
+      status:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for CRUD application
+  title: crud-books API
+  version: "1.0"
+paths:
+  /book:
+    get:
+      consumes:
+      - application/json
+      description: Get all books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Book'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+      summary: Get books
+      tags:
+      - book
+    post:
+      consumes:
+      - application/json
+      description: Create new book
+      parameters:
+      - description: book info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Book'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+      summary: Create book
+      tags:
+      - book
+  /book/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete book by id
+      parameters:
+      - description: book id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.statusResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+      summary: Delete book
+      tags:
+      - book
+    get:
+      consumes:
+      - application/json
+      description: Get book by id
+      parameters:
+      - description: book id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+      summary: Get book
+      tags:
+      - book
+    put:
+      consumes:
+      - application/json
+      description: Update book by id
+      parameters:
+      - description: book id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: book update info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdateBookInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.errorResponse'
+      summary: Update book
+      tags:
+      - book
+swagger: "2.0"
