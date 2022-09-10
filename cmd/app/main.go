@@ -5,9 +5,6 @@ import (
 )
 
 // todo
-// swagger +
-// gin +
-// cache
 // auth
 
 // @title       crud-books API

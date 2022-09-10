@@ -7,6 +7,7 @@ import (
 	"github.com/EmirShimshir/crud-books/internal/service"
 	"github.com/EmirShimshir/crud-books/internal/transport/rest"
 	"github.com/EmirShimshir/crud-books/pkg/database"
+	"github.com/EmirShimshir/inMemoryCache"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
@@ -14,9 +15,9 @@ import (
 )
 
 func init() {
-	log.SetFormatter(&log.JSONFormatter{})
+	log.SetFormatter(&log.TextFormatter{})
 	log.SetOutput(os.Stdout)
-	log.SetLevel(log.InfoLevel)
+	log.SetLevel(log.DebugLevel)
 }
 
 func Run(configDir, configFile string) {
@@ -54,9 +55,10 @@ func Run(configDir, configFile string) {
 
 	// init deps
 	repositories := psql.NewRepositories(db)
-	services := service.NewServices(repositories)
+	cache := inMemoryCache.New()
+	services := service.NewServices(repositories, cache, cfg.Cache.TTL)
 	handler := rest.NewHandler(services)
-	log.Info("repositorys, services  and handler initialized")
+	log.Info("repositories, services  and handler initialized")
 
 	// init server
 	server := http.Server{

@@ -2,3 +2,6 @@ server:
   port: 8080
   write_timeout: 15
   read_timeout: 15
+
+cache:
+  ttl: 10s

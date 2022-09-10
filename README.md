@@ -5,6 +5,7 @@
 + postgres
 + gin
 + swagger
++ cache
 
 ## How to start:
 + Install docker-compose and make
