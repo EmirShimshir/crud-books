@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/kelseyhightower/envconfig"
 	"github.com/spf13/viper"
+	"time"
 )
 
 type Config struct {
@@ -13,6 +14,10 @@ type Config struct {
 		WriteTimeout int `mapstructure:"write_timeout"`
 		ReadTimeout  int `mapstructure:"read_timeout"`
 	} `mapstructure:"server"`
+
+	Cache struct {
+		TTL time.Duration `mapstructure:"ttl"`
+	} `mapstructure:"cache"`
 }
 
 type Postgres struct {
