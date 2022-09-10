@@ -3,14 +3,21 @@ package config
 import (
 	"github.com/kelseyhightower/envconfig"
 	"github.com/spf13/viper"
+	"time"
 )
 
 type Config struct {
 	DB Postgres
 
 	Server struct {
-		Port int `mapstructure:"port"`
+		Port         int `mapstructure:"port"`
+		WriteTimeout int `mapstructure:"write_timeout"`
+		ReadTimeout  int `mapstructure:"read_timeout"`
 	} `mapstructure:"server"`
+
+	Cache struct {
+		TTL time.Duration `mapstructure:"ttl"`
+	} `mapstructure:"cache"`
 }
 
 type Postgres struct {

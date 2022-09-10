@@ -22,6 +22,6 @@ RUN apt-get install -y migrate
 
 # build go app
 RUN go mod download
-RUN go build -o crud-books cmd/main.go
+RUN go build -o crud-books cmd/app/main.go
 
 CMD ["./crud-books"]

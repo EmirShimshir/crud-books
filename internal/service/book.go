@@ -2,49 +2,116 @@ package service
 
 import (
 	"context"
+	log "github.com/sirupsen/logrus"
+	"strconv"
 	"time"
 
 	"github.com/EmirShimshir/crud-books/internal/domain"
+
+	"github.com/EmirShimshir/inMemoryCache"
 )
 
-type BooksRepository interface {
-	Create(ctx context.Context, book domain.Book) error
-	GetByID(ctx context.Context, id int64) (domain.Book, error)
-	GetAll(ctx context.Context) ([]domain.Book, error)
-	Delete(ctx context.Context, id int64) error
-	Update(ctx context.Context, id int64, inp domain.UpdateBookInput) error
+var bookSalt = "_book"
+var listSalt = "_list"
+var listID int64 = 0
+
+type BookService struct {
+	repo  domain.BookRepository
+	cache inMemoryCache.Cache
+	ttl   time.Duration
 }
 
-type Books struct {
-	repo BooksRepository
-}
-
-func NewBooks(repo BooksRepository) *Books {
-	return &Books{
-		repo: repo,
+func NewBookService(repo domain.BookRepository, cache inMemoryCache.Cache, ttl time.Duration) *BookService {
+	return &BookService{
+		repo:  repo,
+		cache: cache,
+		ttl:   ttl,
 	}
 }
 
-func (b *Books) Create(ctx context.Context, book domain.Book) error {
-	if book.PublishDate.IsZero() {
-		book.PublishDate = time.Now()
+func (b *BookService) Create(ctx context.Context, bookInput domain.Book) (*domain.Book, error) {
+	if bookInput.PublishDate.IsZero() {
+		bookInput.PublishDate = time.Now()
 	}
 
-	return b.repo.Create(ctx, book)
+	book, err := b.repo.Create(ctx, bookInput)
+	if err == nil {
+		_ = b.cache.Set(idToString(book.ID, bookSalt), book, b.ttl)
+		listID++
+	}
+
+	return book, err
 }
 
-func (b *Books) GetByID(ctx context.Context, id int64) (domain.Book, error) {
-	return b.repo.GetByID(ctx, id)
+func (b *BookService) GetByID(ctx context.Context, id int64) (book *domain.Book, err error) {
+	i, err := b.cache.Get(idToString(id, bookSalt))
+	var ok bool
+	if err == nil {
+		log.WithFields(log.Fields{
+			"from": "BookService.GetById()",
+		}).Debug("Get book from cache")
+		book, ok = i.(*domain.Book)
+	}
+
+	if !ok {
+		log.WithFields(log.Fields{
+			"from": "BookService.GetById()",
+		}).Debug("Get book from repo")
+		book, err = b.repo.GetByID(ctx, id)
+	}
+
+	if err == nil {
+		_ = b.cache.Set(idToString(id, bookSalt), book, b.ttl)
+	}
+
+	return book, err
 }
 
-func (b *Books) GetAll(ctx context.Context) ([]domain.Book, error) {
-	return b.repo.GetAll(ctx)
+func (b *BookService) List(ctx context.Context) (books []domain.Book, err error) {
+	i, err := b.cache.Get(idToString(listID, listSalt))
+	var ok bool
+	if err == nil {
+		log.WithFields(log.Fields{
+			"from": "BookService.GetById()",
+		}).Debug("Get book from cache")
+		books, ok = i.([]domain.Book)
+	}
+
+	if !ok {
+		log.WithFields(log.Fields{
+			"from": "BookService.GetById()",
+		}).Debug("Get book from repo")
+		books, err = b.repo.List(ctx)
+	}
+
+	if err == nil {
+		_ = b.cache.Set(idToString(listID, listSalt), books, b.ttl)
+	}
+
+	return books, err
 }
 
-func (b *Books) Delete(ctx context.Context, id int64) error {
-	return b.repo.Delete(ctx, id)
+func (b *BookService) Delete(ctx context.Context, id int64) error {
+
+	err := b.repo.Delete(ctx, id)
+	if err == nil {
+		_ = b.cache.Delete(idToString(id, bookSalt))
+		listID++
+	}
+
+	return err
 }
 
-func (b *Books) Update(ctx context.Context, id int64, inp domain.UpdateBookInput) error {
-	return b.repo.Update(ctx, id, inp)
+func (b *BookService) Update(ctx context.Context, id int64, inp domain.UpdateBookInput) (*domain.Book, error) {
+	book, err := b.repo.Update(ctx, id, inp)
+	if err == nil {
+		_ = b.cache.Set(idToString(book.ID, bookSalt), book, b.ttl)
+		listID++
+	}
+
+	return book, err
+}
+
+func idToString(id int64, cacheSalt string) string {
+	return strconv.FormatInt(id, 10) + cacheSalt
 }
