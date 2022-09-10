@@ -22,5 +22,8 @@ clean_with_db:
 	make clean
 	docker volume rm crud-books_postgres_volume || true
 
+swag:
+	swag init -g cmd/app/main.go
+
 
 
