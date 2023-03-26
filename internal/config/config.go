@@ -10,9 +10,10 @@ type Config struct {
 	DB Postgres
 
 	Server struct {
-		Port         int `mapstructure:"port"`
-		WriteTimeout int `mapstructure:"write_timeout"`
-		ReadTimeout  int `mapstructure:"read_timeout"`
+		Host         string `mapstructure:"host"`
+		Port         int    `mapstructure:"port"`
+		WriteTimeout int    `mapstructure:"write_timeout"`
+		ReadTimeout  int    `mapstructure:"read_timeout"`
 	} `mapstructure:"server"`
 
 	Cache struct {
@@ -49,3 +50,4 @@ func New(folder, filename string) (*Config, error) {
 
 	return cfg, nil
 }
+

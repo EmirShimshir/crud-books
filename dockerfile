@@ -25,3 +25,4 @@ RUN go mod download
 RUN go build -o crud-books cmd/app/main.go
 
 CMD ["./crud-books"]
+
