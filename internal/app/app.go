@@ -8,6 +8,7 @@ import (
 	"github.com/EmirShimshir/crud-books/internal/transport/rest"
 	"github.com/EmirShimshir/crud-books/pkg/database"
 	"github.com/EmirShimshir/inMemoryCache"
+	"github.com/rs/cors"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
@@ -60,10 +61,13 @@ func Run(configDir, configFile string) {
 	handler := rest.NewHandler(services)
 	log.Info("repositories, services  and handler initialized")
 
+	corsSettings := CorsSettings()
+
+	corsHandler := corsSettings.Handler(handler.InitRouter())
 	// init server
 	server := http.Server{
 		Addr:         fmt.Sprintf(":%d", cfg.Server.Port),
-		Handler:      handler.InitRouter(),
+		Handler:      corsHandler,
 		WriteTimeout: time.Duration(cfg.Server.WriteTimeout) * time.Second,
 		ReadTimeout:  time.Duration(cfg.Server.ReadTimeout) * time.Second,
 	}
@@ -77,4 +81,23 @@ func Run(configDir, configFile string) {
 			"problem": "shutdown server",
 		}).Fatal(err.Error())
 	}
+}
+
+func CorsSettings() *cors.Cors {
+	c := cors.New(cors.Options{
+		AllowedMethods: []string{
+			http.MethodGet,
+			http.MethodDelete,
+			http.MethodPost,
+			http.MethodPut,
+		},
+		AllowedOrigins:     []string{},
+		AllowCredentials:   true,
+		AllowedHeaders:     []string{},
+		OptionsPassthrough: true,
+		ExposedHeaders:     []string{},
+		Debug:              true,
+	})
+
+	return c
 }
